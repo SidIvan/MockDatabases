@@ -2,13 +2,11 @@ package DatabaseManager.controllers;
 
 import DatabaseManager.exceptions.TableInitializationException;
 import DatabaseManager.services.TablesService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/table")
@@ -19,7 +17,6 @@ public class TablesController {
 
     @PostMapping("/create-table")
     public ResponseEntity<String> createTable(@RequestBody String tableInfo) {
-
         try {
             tablesService.createTable(tableInfo);
             return new ResponseEntity<String>(HttpStatus.OK);
@@ -30,5 +27,23 @@ public class TablesController {
             ex.printStackTrace();
         }
         return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @GetMapping("/get-table-by-name/{name}")
+    public ResponseEntity<JSONObject> getTableByName(@PathVariable(value="name") String name) {
+        try {
+            JSONObject json = tablesService.getTableByName(name);
+            if (json.isEmpty()) {
+                ResponseEntity<JSONObject> response = new ResponseEntity<>(HttpStatus.OK);
+                return response;
+            }
+            ResponseEntity<JSONObject> response = new ResponseEntity<>(json, HttpStatus.OK);
+            return response;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<JSONObject>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

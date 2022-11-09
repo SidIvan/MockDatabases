@@ -18,11 +18,22 @@ public class TablesService {
         try {
             JSONObject json = (JSONObject) JSONValue.parseWithException(tableInfo);
             String sqlQuery = TableSQLConstructor.constructCreate(json);
-            tablesRepository.send(sqlQuery);
+            tablesRepository.sendCreate(sqlQuery);
         } catch (TableInitializationException ex) {
             throw ex;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public JSONObject getTableByName(String name) {
+        try {
+            String sqlQuery = TableSQLConstructor.constructGetByName(name);
+            JSONObject json = tablesRepository.sendGetByName(sqlQuery, name);
+            return json;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new JSONObject();
     }
 }

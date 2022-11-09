@@ -46,4 +46,19 @@ public class TableSQLConstructor {
         query.append("));");
         return query.toString();
     }
+
+    public static String constructGetByName(String name) {
+        String query = "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + name +"'";
+        return query;
+    }
+
+    public static String constructCheckExistence(String name) {
+        String query = "SELECT EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = '" + name + "');";
+        return query;
+    }
+
+    public static String constructGetPrimaryKeyName(String name) {
+        String query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_NAME = '" + name + "'";
+        return query;
+    }
 }
