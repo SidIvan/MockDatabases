@@ -1,5 +1,6 @@
 package DatabaseManager.controllers;
 
+import DatabaseManager.exceptions.TableDoesNotExistException;
 import DatabaseManager.exceptions.TableInitializationException;
 import DatabaseManager.services.TablesService;
 import org.json.simple.JSONObject;
@@ -45,5 +46,18 @@ public class TablesController {
             ex.printStackTrace();
         }
         return new ResponseEntity<JSONObject>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @DeleteMapping("drop-table-by-name/{name}")
+    public ResponseEntity<String> deleteTableByName(@PathVariable(value="name") String tableName) {
+        try {
+            tablesService.deleteTableByName(tableName);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (TableDoesNotExistException ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

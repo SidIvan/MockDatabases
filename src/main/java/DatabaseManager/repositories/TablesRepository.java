@@ -1,5 +1,6 @@
 package DatabaseManager.repositories;
 
+import DatabaseManager.exceptions.TableDoesNotExistException;
 import DatabaseManager.exceptions.TableInitializationException;
 import DatabaseManager.sqlConstructors.TableSQLConstructor;
 import org.json.simple.JSONArray;
@@ -9,15 +10,9 @@ import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Tuple;
+import javax.persistence.*;
 import java.lang.reflect.Array;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -79,4 +74,24 @@ public class TablesRepository {
         return new JSONObject();
     }
 
+    public void sendDelete(String sqlQuery, String name) throws TableDoesNotExistException {
+        try {
+            String URI = "jdbc:postgresql://localhost:5432/DatabaseInfo",
+                    login = "postgres",
+                    password = "p9nfeebx";
+            Connection connection = DriverManager.getConnection(URI,
+                    login, password);
+            Statement statement = connection.createStatement();
+            ResultSet isTableExists = statement.executeQuery(TableSQLConstructor.constructCheckExistence(name));
+            isTableExists.next();
+            if (!isTableExists.getBoolean("exists")) {
+                throw new TableDoesNotExistException();
+            }
+            statement.executeUpdate(sqlQuery);
+        } catch (TableDoesNotExistException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package DatabaseManager.services;
 
+import DatabaseManager.exceptions.TableDoesNotExistException;
 import DatabaseManager.exceptions.TableInitializationException;
 import DatabaseManager.repositories.TablesRepository;
 import DatabaseManager.sqlConstructors.TableSQLConstructor;
@@ -35,5 +36,16 @@ public class TablesService {
             ex.printStackTrace();
         }
         return new JSONObject();
+    }
+
+    public void deleteTableByName(String name) throws TableDoesNotExistException {
+        try {
+            String sqlQuery = TableSQLConstructor.constructDelete(name);
+            tablesRepository.sendDelete(sqlQuery, name);
+        } catch (TableDoesNotExistException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

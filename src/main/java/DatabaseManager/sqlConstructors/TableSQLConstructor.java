@@ -61,4 +61,9 @@ public class TableSQLConstructor {
         String query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_NAME = '" + name + "'";
         return query;
     }
+
+    public static String constructDelete(String name) {
+        String query = "DROP TABLE " + name;
+        return query;
+    }
 }
