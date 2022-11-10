@@ -8,6 +8,10 @@ import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
@@ -59,5 +63,33 @@ public class CommonQueryService {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public CommonQueryEntity getById(String id) throws QueryInitializationException {
+        try {
+            Optional<CommonQueryEntity> query = commonQueryRepository.findById(parseLong(id));
+            if (query.isEmpty()) {
+                throw new QueryInitializationException(2);
+            }
+            return query.get();
+        } catch (NumberFormatException ex) {
+            throw new QueryInitializationException(1);
+        } catch (QueryInitializationException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            System.out.println("A");
+            ex.printStackTrace();
+        }
+        return new CommonQueryEntity();
+    }
+
+    public List<CommonQueryEntity> getAll() {
+        try {
+            List<CommonQueryEntity> queries = commonQueryRepository.findAll();
+            return queries;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 }

@@ -25,6 +25,7 @@ public class CommonQueryEntity {
     @Column
     private String value;
 
+
     public CommonQueryEntity() {}
 
     public CommonQueryEntity(String jsonString) throws QueryInitializationException {
