@@ -3,6 +3,7 @@ package DatabaseManager.services;
 import DatabaseManager.Entities.CommonQueryEntity;
 import DatabaseManager.exceptions.QueryInitializationException;
 import DatabaseManager.repositories.CommonQueryRepository;
+import DatabaseManager.repositories.SQLExecuter;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,5 +92,20 @@ public class CommonQueryService {
             ex.printStackTrace();
         }
         return new ArrayList<>();
+    }
+
+    public void executeQuery(String id) throws QueryInitializationException {
+        try {
+            long queryId = parseLong(id);
+            Optional<CommonQueryEntity> query = commonQueryRepository.findById(parseLong(id));
+            if (query.isEmpty()) {
+                throw new QueryInitializationException(2);
+            }
+            SQLExecuter.execute(query.get().getValue());
+        } catch (NumberFormatException ex) {
+            throw new QueryInitializationException(1);
+        } catch (QueryInitializationException ex) {
+            throw ex;
+        }
     }
 }

@@ -17,6 +17,7 @@ public class QueryInitializationException extends Exception {
             case 0 -> "Query info have not given";
             case 1 -> "Wrong id format";
             case 2 -> "Query does not exist";
+            case 3 -> "Wrong query";
             default -> "Unknown exception";
         };
         return res;
