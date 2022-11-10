@@ -8,6 +8,7 @@ import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
 @Service
@@ -40,6 +41,21 @@ public class CommonQueryService {
             throw ex;
         } catch (NumberFormatException ex) {
             throw new QueryInitializationException(1);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteQuery(String id) throws QueryInitializationException {
+        try {
+            int numDeletes = commonQueryRepository.deleteQuery(parseInt(id));
+            if (numDeletes == 0) {
+                throw new QueryInitializationException(2);
+            }
+        } catch (NumberFormatException ex) {
+            throw new QueryInitializationException(1);
+        } catch (QueryInitializationException ex) {
+            throw ex;
         } catch (Exception ex) {
             ex.printStackTrace();
         }

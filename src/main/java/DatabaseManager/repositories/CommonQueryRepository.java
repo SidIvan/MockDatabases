@@ -12,6 +12,12 @@ public interface CommonQueryRepository extends JpaRepository<CommonQueryEntity, 
 
     @Modifying
     @Transactional
+    @Query(value = "DELETE FROM common_queries WHERE id = :id",
+            nativeQuery = true)
+    int deleteQuery(int id);
+
+    @Modifying
+    @Transactional
     @Query(value = "UPDATE common_queries SET value = :value WHERE id = :id",
             nativeQuery = true)
     int putValue(long id, String value);

@@ -39,4 +39,17 @@ public class CommonQueryController {
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @DeleteMapping("/delete-single-query-by-id/{id}")
+    ResponseEntity<String> deleteQuery(@PathVariable(name = "id") String id) {
+        try {
+            commonQueryService.deleteQuery(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (QueryInitializationException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
