@@ -14,7 +14,9 @@ public class QueryInitializationException extends Exception {
 
     public String toString() {
         String res = switch (id) {
-            case 0 -> "Query info does not exist";
+            case 0 -> "Query info have not given";
+            case 1 -> "Wrong id format";
+            case 2 -> "Query does not exist";
             default -> "Unknown exception";
         };
         return res;
