@@ -23,6 +23,10 @@ public class TablesRepository {
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 
+    private static final String URI = "jdbc:postgresql://localhost:5432/DatabaseInfo",
+                         login = "postgres",
+                         password = "p9nfeebx";
+
     public void sendCreate(String sqlQuery) throws TableInitializationException {
         try {
             EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -37,11 +41,21 @@ public class TablesRepository {
         }
     }
 
+    public static boolean isTableExists(String tableName) {
+        try {
+            Connection connection = DriverManager.getConnection(URI, login, password);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(TableSQLConstructor.constructCheckExistence(tableName));
+            resultSet.next();
+            return resultSet.getBoolean("exists");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
     public JSONObject sendGetByName(String sqlQuery, String tableName) {
         try {
-            String URI = "jdbc:postgresql://localhost:5432/DatabaseInfo",
-                    login = "postgres",
-                    password = "p9nfeebx";
             Connection connection = DriverManager.getConnection(URI,
                     login, password);
             Statement statement = connection.createStatement();
@@ -55,9 +69,7 @@ public class TablesRepository {
                 columnInfos.add(columnInfo);
             }
             if (columnInfos.size() == 0) {
-                ResultSet isTableExists = statement.executeQuery(TableSQLConstructor.constructCheckExistence(tableName));
-                isTableExists.next();
-                if (!isTableExists.getBoolean("exists")) {
+                if (!isTableExists(tableName)) {
                     return new JSONObject();
                 }
             }
