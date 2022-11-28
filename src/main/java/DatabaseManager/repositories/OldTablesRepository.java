@@ -6,20 +6,13 @@ import DatabaseManager.sqlConstructors.TableSQLConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessResourceUsageException;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
-import java.lang.reflect.Array;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 @Repository
-public class TablesRepository {
+public class OldTablesRepository {
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 
@@ -34,6 +27,7 @@ public class TablesRepository {
             trans.begin();
             entityManager.createNativeQuery(sqlQuery).executeUpdate();
             trans.commit();
+
         } catch (javax.persistence.PersistenceException ex) {
             throw new TableInitializationException(0);
         } catch (Exception ex) {

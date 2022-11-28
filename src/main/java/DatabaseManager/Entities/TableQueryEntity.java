@@ -1,7 +1,7 @@
 package DatabaseManager.Entities;
 
 import DatabaseManager.exceptions.QueryInitializationException;
-import DatabaseManager.repositories.TablesRepository;
+import DatabaseManager.repositories.OldTablesRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.simple.JSONObject;
@@ -28,6 +28,10 @@ public class TableQueryEntity {
     @Column
     private String tableName;
 
+    @ManyToOne
+    @JoinColumn(name = "table_id")
+    private TableEntity tableEntity;
+
 
     public TableQueryEntity() {}
 
@@ -40,7 +44,7 @@ public class TableQueryEntity {
             if (!json.containsKey("tableName")) {
                 throw new QueryInitializationException(5);
             }
-            if (!TablesRepository.isTableExists(json.get("tableName").toString())) {
+            if (!OldTablesRepository.isTableExists(json.get("tableName").toString())) {
                 throw new QueryInitializationException(4);
             }
             tableName = json.get("tableName").toString();

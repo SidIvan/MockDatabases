@@ -1,25 +1,32 @@
 package DatabaseManager.services;
 
+import DatabaseManager.Entities.TableEntity;
 import DatabaseManager.exceptions.TableDoesNotExistException;
 import DatabaseManager.exceptions.TableInitializationException;
-import DatabaseManager.repositories.TablesRepository;
+import DatabaseManager.repositories.OldTablesRepository;
+import DatabaseManager.repositories.TableEntityRepository;
 import DatabaseManager.sqlConstructors.TableSQLConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TablesService {
 
     @Autowired
-    TablesRepository tablesRepository;
+    OldTablesRepository oldTablesRepository;
+
+    @Autowired
+    TableEntityRepository tableEntityRepository;
+
     public void createTable(String tableInfo) throws TableInitializationException {
         try {
             JSONObject json = (JSONObject) JSONValue.parseWithException(tableInfo);
             String sqlQuery = TableSQLConstructor.constructCreate(json);
-            tablesRepository.sendCreate(sqlQuery);
+            oldTablesRepository.sendCreate(sqlQuery);
+            TableEntity tableEntity = new TableEntity(json.get("tableName").toString());
+            tableEntityRepository.saveAndFlush(tableEntity);
         } catch (TableInitializationException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -30,7 +37,7 @@ public class TablesService {
     public JSONObject getTableByName(String name) {
         try {
             String sqlQuery = TableSQLConstructor.constructGetByName(name);
-            JSONObject json = tablesRepository.sendGetByName(sqlQuery, name);
+            JSONObject json = oldTablesRepository.sendGetByName(sqlQuery, name);
             return json;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -41,7 +48,7 @@ public class TablesService {
     public void deleteTableByName(String name) throws TableDoesNotExistException {
         try {
             String sqlQuery = TableSQLConstructor.constructDelete(name);
-            tablesRepository.sendDelete(sqlQuery, name);
+            oldTablesRepository.sendDelete(sqlQuery, name);
         } catch (TableDoesNotExistException ex) {
             throw ex;
         } catch (Exception ex) {

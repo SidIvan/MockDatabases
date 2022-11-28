@@ -25,6 +25,7 @@ public class TableQueryController {
             Long id = tableQueryService.createQuery(jsonString);
             return new ResponseEntity<Long>(id, HttpStatus.OK);
         } catch (QueryInitializationException ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -1,11 +1,12 @@
 package DatabaseManager.services;
 
-import DatabaseManager.Entities.CommonQueryEntity;
+import DatabaseManager.Entities.TableEntity;
 import DatabaseManager.Entities.TableQueryEntity;
 import DatabaseManager.exceptions.QueryInitializationException;
 import DatabaseManager.repositories.SQLExecuter;
+import DatabaseManager.repositories.TableEntityRepository;
 import DatabaseManager.repositories.TableQueryRepository;
-import DatabaseManager.repositories.TablesRepository;
+import DatabaseManager.repositories.OldTablesRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,18 @@ public class TableQueryService {
     @Autowired
     TableQueryRepository tableQueryRepository;
 
+    @Autowired
+    TableEntityRepository tableEntityRepository;
+
     public long createQuery(String jsonString) throws QueryInitializationException {
         try {
             TableQueryEntity query = new TableQueryEntity(jsonString);
+            System.out.println(query.getTableName());
+            Optional<TableEntity> tableEntity = tableEntityRepository.getByTableName(query.getTableName()).get(0);
+            if (tableEntity.isEmpty()) {
+                throw new QueryInitializationException(4);
+            }
+            query.setTableEntity(tableEntity.get());
             return tableQueryRepository.saveAndFlush(query).getId();
         } catch (QueryInitializationException ex) {
             throw ex;
@@ -42,7 +52,7 @@ public class TableQueryService {
             long id = parseLong(json.get("queryId").toString());
             long changeNum = tableQueryRepository.putValue(id, json.get("query").toString(), json.get("tableName").toString());
             if (changeNum == 0) {
-                if (!TablesRepository.isTableExists(json.get("tableName").toString())) {
+                if (!OldTablesRepository.isTableExists(json.get("tableName").toString())) {
                     throw new QueryInitializationException(4);
                 }
                 throw new QueryInitializationException(2);
