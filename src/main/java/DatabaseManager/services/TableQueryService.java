@@ -6,7 +6,7 @@ import DatabaseManager.exceptions.QueryInitializationException;
 import DatabaseManager.repositories.SQLExecuter;
 import DatabaseManager.repositories.TableEntityRepository;
 import DatabaseManager.repositories.TableQueryRepository;
-import DatabaseManager.repositories.OldTablesRepository;
+import DatabaseManager.repositories.TableRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class TableQueryService {
             long id = parseLong(json.get("queryId").toString());
             long changeNum = tableQueryRepository.putValue(id, json.get("query").toString(), json.get("tableName").toString());
             if (changeNum == 0) {
-                if (!OldTablesRepository.isTableExists(json.get("tableName").toString())) {
+                if (!TableRepository.isTableExists(json.get("tableName").toString())) {
                     throw new QueryInitializationException(4);
                 }
                 throw new QueryInitializationException(2);

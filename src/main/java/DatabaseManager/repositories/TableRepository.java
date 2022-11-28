@@ -1,8 +1,9 @@
 package DatabaseManager.repositories;
 
+import DatabaseManager.SQLUtils.DatabaseConfig;
 import DatabaseManager.exceptions.TableDoesNotExistException;
 import DatabaseManager.exceptions.TableInitializationException;
-import DatabaseManager.sqlConstructors.TableSQLConstructor;
+import DatabaseManager.SQLUtils.TableSQLConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,22 +13,21 @@ import javax.persistence.*;
 import java.sql.*;
 
 @Repository
-public class OldTablesRepository {
+public class TableRepository {
+    @Deprecated
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 
-    private static final String URI = "jdbc:postgresql://localhost:5432/DatabaseInfo",
-                         login = "postgres",
-                         password = "p9nfeebx";
+    private static final DatabaseConfig databaseConfig = new DatabaseConfig();
 
-    public void sendCreate(String sqlQuery) throws TableInitializationException {
+    @Deprecated
+    public void entityManagerSendCreate(String sqlQuery) throws TableInitializationException {
         try {
             EntityManager entityManager = entityManagerFactory.createEntityManager();
             EntityTransaction trans = entityManager.getTransaction();
             trans.begin();
             entityManager.createNativeQuery(sqlQuery).executeUpdate();
             trans.commit();
-
         } catch (javax.persistence.PersistenceException ex) {
             throw new TableInitializationException(0);
         } catch (Exception ex) {
@@ -35,9 +35,29 @@ public class OldTablesRepository {
         }
     }
 
+    public void sendCreate(String sqlQuery) throws TableInitializationException {
+        try {
+            Connection connection = DriverManager.getConnection(databaseConfig.URI,
+                    databaseConfig.login, databaseConfig.password);
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sqlQuery);
+        } catch (SQLException ex) {
+            System.out.println(ex.getSQLState());
+            int errId = -1;
+            if (ex.getSQLState().equals("42P07")) {
+                errId = 0;
+            } else if (ex.getSQLState().equals("42704")) {
+                errId = 6;
+            }
+            throw new TableInitializationException(errId);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     public static boolean isTableExists(String tableName) {
         try {
-            Connection connection = DriverManager.getConnection(URI, login, password);
+            Connection connection = DriverManager.getConnection(databaseConfig.URI,
+                    databaseConfig.login, databaseConfig.password);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(TableSQLConstructor.constructCheckExistence(tableName));
             resultSet.next();
@@ -50,8 +70,8 @@ public class OldTablesRepository {
 
     public JSONObject sendGetByName(String sqlQuery, String tableName) {
         try {
-            Connection connection = DriverManager.getConnection(URI,
-                    login, password);
+            Connection connection = DriverManager.getConnection(databaseConfig.URI,
+                    databaseConfig.login, databaseConfig.password);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlQuery);
             JSONObject result = new JSONObject();

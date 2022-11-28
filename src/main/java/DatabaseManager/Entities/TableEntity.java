@@ -20,7 +20,8 @@ public class TableEntity {
     @Column
     private String tableName;
 
-    @OneToMany(mappedBy = "tableEntity")
+    @OneToMany(mappedBy = "tableEntity",
+                cascade = CascadeType.ALL)
     private Set<TableQueryEntity> tableQueryEntities;
 
     public TableEntity() {}

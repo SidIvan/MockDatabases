@@ -1,4 +1,4 @@
-package DatabaseManager.sqlConstructors;
+package DatabaseManager.SQLUtils;
 
 import DatabaseManager.exceptions.TableInitializationException;
 import org.json.simple.JSONArray;
