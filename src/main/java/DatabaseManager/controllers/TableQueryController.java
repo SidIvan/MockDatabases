@@ -4,6 +4,7 @@ import DatabaseManager.entities.TableQueryEntity;
 import DatabaseManager.exceptions.QueryInitializationException;
 import DatabaseManager.services.TableQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,12 @@ public class TableQueryController {
             Long id = tableQueryService.createQuery(jsonString);
             return new ResponseEntity<Long>(id, HttpStatus.OK);
         } catch (QueryInitializationException ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Error message", ex.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .headers(responseHeaders)
+                    .build();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -37,7 +42,12 @@ public class TableQueryController {
             tableQueryService.changeQuery(jsonString);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (QueryInitializationException ex) {
-            return new ResponseEntity<String> (ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Error message", ex.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .headers(responseHeaders)
+                    .build();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -50,7 +60,12 @@ public class TableQueryController {
             tableQueryService.deleteQuery(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (QueryInitializationException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Error message", ex.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .headers(responseHeaders)
+                    .build();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -63,7 +78,12 @@ public class TableQueryController {
             TableQueryEntity query = tableQueryService.getById(id);
             return new ResponseEntity<>(query, HttpStatus.OK);
         } catch (QueryInitializationException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Error message", ex.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .headers(responseHeaders)
+                    .build();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -87,7 +107,12 @@ public class TableQueryController {
             tableQueryService.executeQuery(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (QueryInitializationException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Error message", ex.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .headers(responseHeaders)
+                    .build();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
