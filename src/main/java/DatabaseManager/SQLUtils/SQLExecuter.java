@@ -1,4 +1,4 @@
-package DatabaseManager.repositories;
+package DatabaseManager.SQLUtils;
 
 import DatabaseManager.exceptions.QueryInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;

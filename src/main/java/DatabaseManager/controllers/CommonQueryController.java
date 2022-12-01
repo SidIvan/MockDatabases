@@ -4,6 +4,7 @@ import DatabaseManager.entities.CommonQueryEntity;
 import DatabaseManager.exceptions.QueryInitializationException;
 import DatabaseManager.services.CommonQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,12 @@ public class CommonQueryController {
             Long id = commonQueryService.createQuery(jsonString);
             return new ResponseEntity<Long>(id, HttpStatus.OK);
         } catch (QueryInitializationException ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Error message", ex.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .headers(responseHeaders)
+                    .build();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -38,7 +44,12 @@ public class CommonQueryController {
             commonQueryService.changeQuery(jsonString);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (QueryInitializationException ex) {
-            return new ResponseEntity<String> (ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Error message", ex.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .headers(responseHeaders)
+                    .build();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -51,7 +62,12 @@ public class CommonQueryController {
             commonQueryService.deleteQuery(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (QueryInitializationException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Error message", ex.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .headers(responseHeaders)
+                    .build();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -64,7 +80,12 @@ public class CommonQueryController {
             CommonQueryEntity query = commonQueryService.getById(id);
             return new ResponseEntity<>(query, HttpStatus.OK);
         } catch (QueryInitializationException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Error message", ex.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .headers(responseHeaders)
+                    .build();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -88,7 +109,12 @@ public class CommonQueryController {
             commonQueryService.executeQuery(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (QueryInitializationException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Error message", ex.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .headers(responseHeaders)
+                    .build();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

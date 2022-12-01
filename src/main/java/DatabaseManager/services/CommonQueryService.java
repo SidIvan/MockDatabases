@@ -3,7 +3,7 @@ package DatabaseManager.services;
 import DatabaseManager.entities.CommonQueryEntity;
 import DatabaseManager.exceptions.QueryInitializationException;
 import DatabaseManager.repositories.CommonQueryRepository;
-import DatabaseManager.repositories.SQLExecuter;
+import DatabaseManager.SQLUtils.SQLExecuter;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;

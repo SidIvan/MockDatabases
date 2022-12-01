@@ -3,7 +3,7 @@ package DatabaseManager.services;
 import DatabaseManager.entities.TableEntity;
 import DatabaseManager.entities.TableQueryEntity;
 import DatabaseManager.exceptions.QueryInitializationException;
-import DatabaseManager.repositories.SQLExecuter;
+import DatabaseManager.SQLUtils.SQLExecuter;
 import DatabaseManager.repositories.TableEntityRepository;
 import DatabaseManager.repositories.TableQueryRepository;
 import DatabaseManager.repositories.TableRepository;
@@ -32,11 +32,11 @@ public class TableQueryService {
         try {
             TableQueryEntity query = new TableQueryEntity(jsonString);
             System.out.println(query.getTableName());
-            Optional<TableEntity> tableEntity = tableEntityRepository.getByTableName(query.getTableName()).get(0);
-            if (tableEntity.isEmpty()) {
+            List<TableEntity> tableEntities = tableEntityRepository.findByTableName(query.getTableName());
+            if (tableEntities.size() == 0) {
                 throw new QueryInitializationException(4);
             }
-            query.setTableEntity(tableEntity.get());
+            query.setTableEntity(tableEntities.get(0));
             return tableQueryRepository.saveAndFlush(query).getId();
         } catch (QueryInitializationException ex) {
             throw ex;

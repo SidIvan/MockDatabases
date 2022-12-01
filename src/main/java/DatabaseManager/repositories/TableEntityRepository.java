@@ -15,12 +15,9 @@ public interface TableEntityRepository extends JpaRepository<TableEntity, Intege
 
     List<TableEntity> findByTableName(String title);
 
+    @Deprecated
     @Query(value = "SELECT * FROM table_entities WHERE table_name = :tableName",
         nativeQuery = true)
     List<Optional<TableEntity>> getByTableName(@Param("tableName") String TableName);
 
-//    @Modifying
-//    @Transactional
-//    @Query(value = "DELETE FROM table_entities WHERE table_name = :name", nativeQuery = true)
-//    int deleteByName(String name);
 }
