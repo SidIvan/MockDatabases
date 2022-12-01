@@ -1,7 +1,7 @@
 package DatabaseManager.services;
 
-import DatabaseManager.Entities.TableEntity;
-import DatabaseManager.Entities.TableQueryEntity;
+import DatabaseManager.entities.TableEntity;
+import DatabaseManager.entities.TableQueryEntity;
 import DatabaseManager.exceptions.QueryInitializationException;
 import DatabaseManager.repositories.SQLExecuter;
 import DatabaseManager.repositories.TableEntityRepository;

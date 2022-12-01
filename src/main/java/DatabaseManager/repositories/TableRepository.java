@@ -18,8 +18,6 @@ public class TableRepository {
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 
-    private static final DatabaseConfig databaseConfig = new DatabaseConfig();
-
     @Deprecated
     public void entityManagerSendCreate(String sqlQuery) throws TableInitializationException {
         try {
@@ -37,8 +35,8 @@ public class TableRepository {
 
     public void sendCreate(String sqlQuery) throws TableInitializationException {
         try {
-            Connection connection = DriverManager.getConnection(databaseConfig.URI,
-                    databaseConfig.login, databaseConfig.password);
+            Connection connection = DriverManager.getConnection(DatabaseConfig.URI,
+                    DatabaseConfig.login, DatabaseConfig.password);
             Statement statement = connection.createStatement();
             statement.executeUpdate(sqlQuery);
         } catch (SQLException ex) {
@@ -56,8 +54,8 @@ public class TableRepository {
     }
     public static boolean isTableExists(String tableName) {
         try {
-            Connection connection = DriverManager.getConnection(databaseConfig.URI,
-                    databaseConfig.login, databaseConfig.password);
+            Connection connection = DriverManager.getConnection(DatabaseConfig.URI,
+                    DatabaseConfig.login, DatabaseConfig.password);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(TableSQLConstructor.constructCheckExistence(tableName));
             resultSet.next();
@@ -70,8 +68,8 @@ public class TableRepository {
 
     public JSONObject sendGetByName(String sqlQuery, String tableName) {
         try {
-            Connection connection = DriverManager.getConnection(databaseConfig.URI,
-                    databaseConfig.login, databaseConfig.password);
+            Connection connection = DriverManager.getConnection(DatabaseConfig.URI,
+                    DatabaseConfig.login, DatabaseConfig.password);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sqlQuery);
             JSONObject result = new JSONObject();
@@ -102,11 +100,8 @@ public class TableRepository {
 
     public void sendDelete(String sqlQuery, String name) throws TableDoesNotExistException {
         try {
-            String URI = "jdbc:postgresql://localhost:5432/DatabaseInfo",
-                    login = "postgres",
-                    password = "p9nfeebx";
-            Connection connection = DriverManager.getConnection(URI,
-                    login, password);
+            Connection connection = DriverManager.getConnection(DatabaseConfig.URI,
+                    DatabaseConfig.login, DatabaseConfig.password);
             Statement statement = connection.createStatement();
             ResultSet isTableExists = statement.executeQuery(TableSQLConstructor.constructCheckExistence(name));
             isTableExists.next();

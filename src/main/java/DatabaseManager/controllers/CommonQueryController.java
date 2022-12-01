@@ -1,6 +1,6 @@
 package DatabaseManager.controllers;
 
-import DatabaseManager.Entities.CommonQueryEntity;
+import DatabaseManager.entities.CommonQueryEntity;
 import DatabaseManager.exceptions.QueryInitializationException;
 import DatabaseManager.services.CommonQueryService;
 import org.springframework.beans.factory.annotation.Autowired;

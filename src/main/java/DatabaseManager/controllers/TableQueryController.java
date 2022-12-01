@@ -1,9 +1,7 @@
 package DatabaseManager.controllers;
 
-import DatabaseManager.Entities.CommonQueryEntity;
-import DatabaseManager.Entities.TableQueryEntity;
+import DatabaseManager.entities.TableQueryEntity;
 import DatabaseManager.exceptions.QueryInitializationException;
-import DatabaseManager.services.CommonQueryService;
 import DatabaseManager.services.TableQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

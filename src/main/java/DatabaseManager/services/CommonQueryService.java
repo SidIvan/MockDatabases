@@ -1,6 +1,6 @@
 package DatabaseManager.services;
 
-import DatabaseManager.Entities.CommonQueryEntity;
+import DatabaseManager.entities.CommonQueryEntity;
 import DatabaseManager.exceptions.QueryInitializationException;
 import DatabaseManager.repositories.CommonQueryRepository;
 import DatabaseManager.repositories.SQLExecuter;

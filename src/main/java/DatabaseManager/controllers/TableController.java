@@ -42,11 +42,8 @@ public class TableController {
             if (json.isEmpty()) {
                 ResponseEntity<JSONObject> response = new ResponseEntity<>(HttpStatus.OK);
             }
-            ResponseEntity<JSONObject> response = new ResponseEntity<>(json, HttpStatus.OK);
-            return response;
+            return new ResponseEntity<>(json, HttpStatus.OK);
         } catch (Exception ex) {
-            ex.printStackTrace();
-        } catch (Throwable ex) {
             ex.printStackTrace();
         }
         return new ResponseEntity<JSONObject>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -58,7 +55,12 @@ public class TableController {
             tableService.deleteTableByName(tableName);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (TableDoesNotExistException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Error message", ex.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .headers(responseHeaders)
+                    .build();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

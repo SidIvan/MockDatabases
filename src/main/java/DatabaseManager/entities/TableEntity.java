@@ -1,4 +1,4 @@
-package DatabaseManager.Entities;
+package DatabaseManager.entities;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +22,7 @@ public class TableEntity {
 
     @OneToMany(mappedBy = "tableEntity",
                 cascade = CascadeType.ALL)
-    private Set<TableQueryEntity> tableQueryEntities;
+    public Set<TableQueryEntity> tableQueryEntities;
 
     public TableEntity() {}
 

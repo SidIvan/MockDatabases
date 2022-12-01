@@ -1,12 +1,11 @@
 package DatabaseManager.services;
 
-import DatabaseManager.Entities.TableEntity;
+import DatabaseManager.entities.TableEntity;
 import DatabaseManager.exceptions.TableDoesNotExistException;
 import DatabaseManager.exceptions.TableInitializationException;
 import DatabaseManager.repositories.TableRepository;
 import DatabaseManager.repositories.TableEntityRepository;
 import DatabaseManager.SQLUtils.TableSQLConstructor;
-import com.fasterxml.jackson.core.JsonParseException;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
@@ -52,7 +51,11 @@ public class TableService {
     public void deleteTableByName(String name) throws TableDoesNotExistException {
         try {
             String sqlQuery = TableSQLConstructor.constructDelete(name);
+            TableEntity tableEntity = tableEntityRepository.findByTableName(name).get(0);
+            tableEntityRepository.delete(tableEntity);
             tableRepository.sendDelete(sqlQuery, name);
+        } catch (IndexOutOfBoundsException ex) {
+            throw new TableDoesNotExistException();
         } catch (TableDoesNotExistException ex) {
             throw ex;
         } catch (Exception ex) {

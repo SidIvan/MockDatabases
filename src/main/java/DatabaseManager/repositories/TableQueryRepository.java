@@ -1,6 +1,6 @@
 package DatabaseManager.repositories;
 
-import DatabaseManager.Entities.TableQueryEntity;
+import DatabaseManager.entities.TableQueryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
