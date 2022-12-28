@@ -1,7 +1,9 @@
 package DatabaseManager.entities;
 
+import DatabaseManager.DTO.CommonQueryDTO;
 import DatabaseManager.exceptions.QueryInitializationException;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -12,20 +14,16 @@ import static java.lang.Long.parseLong;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name="common_queries")
-public class CommonQueryEntity {
+public class CommonQueryEntity extends AbstractQueryEntity {
 
-    @Id
-    @Column
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
+    public CommonQueryEntity(CommonQueryDTO dto) {
+        super.setId(dto.getId());
+        super.setValue(dto.getValue());
 
-    @Column
-    private String value;
-
-
-    public CommonQueryEntity() {}
+    }
 
     public CommonQueryEntity(String jsonString) throws QueryInitializationException {
         try {
@@ -43,4 +41,5 @@ public class CommonQueryEntity {
             ex.printStackTrace();
         }
     }
+
 }

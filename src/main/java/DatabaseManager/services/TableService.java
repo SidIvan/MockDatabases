@@ -6,6 +6,7 @@ import DatabaseManager.exceptions.TableInitializationException;
 import DatabaseManager.repositories.TableRepository;
 import DatabaseManager.repositories.TableEntityRepository;
 import DatabaseManager.SQLUtils.TableSQLConstructor;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
@@ -13,10 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class TableService {
 
-    @Autowired
-    TableRepository tableRepository;
+
+    private final TableRepository tableRepository;
 
     @Autowired
     TableEntityRepository tableEntityRepository;

@@ -7,9 +7,9 @@ import DatabaseManager.SQLUtils.SQLExecuter;
 import DatabaseManager.repositories.TableEntityRepository;
 import DatabaseManager.repositories.TableQueryRepository;
 import DatabaseManager.repositories.TableRepository;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,13 +20,12 @@ import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
 @Service
+@RequiredArgsConstructor
 public class TableQueryService {
 
-    @Autowired
-    TableQueryRepository tableQueryRepository;
+    private final TableQueryRepository tableQueryRepository;
 
-    @Autowired
-    TableEntityRepository tableEntityRepository;
+    private final TableEntityRepository tableEntityRepository;
 
     public long createQuery(String jsonString) throws QueryInitializationException {
         try {
@@ -50,7 +49,7 @@ public class TableQueryService {
                 throw new QueryInitializationException(0);
             }
             long id = parseLong(json.get("queryId").toString());
-            long changeNum = tableQueryRepository.putValue(id, json.get("query").toString(), json.get("tableName").toString());
+            long changeNum = tableQueryRepository.putValue(id, json.get("query").toString());
             if (changeNum == 0) {
                 if (!TableRepository.isTableExists(json.get("tableName").toString())) {
                     throw new QueryInitializationException(4);

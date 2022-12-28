@@ -15,7 +15,7 @@ import static java.lang.Long.parseLong;
 @Setter
 @Entity
 @Table(name="table_queries")
-public class TableQueryEntity {
+public class TableQueryEntity{
 
     @Id
     @Column

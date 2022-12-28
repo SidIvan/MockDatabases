@@ -1,9 +1,11 @@
 package DatabaseManager.services;
 
+import DatabaseManager.DTO.CommonQueryDTO;
 import DatabaseManager.entities.CommonQueryEntity;
 import DatabaseManager.exceptions.QueryInitializationException;
 import DatabaseManager.repositories.CommonQueryRepository;
 import DatabaseManager.SQLUtils.SQLExecuter;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,35 +19,22 @@ import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
 @Service
+@RequiredArgsConstructor
 public class CommonQueryService {
 
-    @Autowired
-    CommonQueryRepository commonQueryRepository;
+    private final CommonQueryRepository commonQueryRepository;
 
-    public long createQuery(String jsonString) throws QueryInitializationException {
+    public long createQuery(CommonQueryEntity queryEntity) throws QueryInitializationException {
         try {
-            CommonQueryEntity query = new CommonQueryEntity(jsonString);
-            return commonQueryRepository.saveAndFlush(query).getId();
-        } catch (QueryInitializationException ex) {
+            return commonQueryRepository.saveAndFlush(queryEntity).getId();
+        } catch (Exception ex) {
             throw ex;
         }
     }
 
-    public void changeQuery(String jsonString) throws QueryInitializationException {
+    public void changeQuery(CommonQueryEntity queryEntity) throws QueryInitializationException {
         try {
-            JSONObject json = (JSONObject) JSONValue.parseWithException(jsonString);
-            if (!json.containsKey("queryId") || !json.containsKey("query")) {
-                throw new QueryInitializationException(0);
-            }
-            long id = parseLong(json.get("queryId").toString());
-            long changeNum = commonQueryRepository.putValue(id, json.get("query").toString());
-            if (changeNum == 0) {
-                throw new QueryInitializationException(2);
-            }
-        } catch (QueryInitializationException ex) {
-            throw ex;
-        } catch (NumberFormatException ex) {
-            throw new QueryInitializationException(1);
+            long changeNum = commonQueryRepository.putValue(queryEntity.getId(), queryEntity.getValue());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -66,9 +55,9 @@ public class CommonQueryService {
         }
     }
 
-    public CommonQueryEntity getById(String id) throws QueryInitializationException {
+    public CommonQueryEntity getById(long id) throws QueryInitializationException {
         try {
-            Optional<CommonQueryEntity> query = commonQueryRepository.findById(parseLong(id));
+            Optional<CommonQueryEntity> query = commonQueryRepository.findById(id);
             if (query.isEmpty()) {
                 throw new QueryInitializationException(2);
             }
