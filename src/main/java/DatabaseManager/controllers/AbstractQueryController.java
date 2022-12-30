@@ -113,7 +113,7 @@ public abstract class AbstractQueryController<E extends AbstractQueryEntity, R e
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/execute-single-query-by-id/{id}")
+    @GetMapping("/execute-query-by-id/{id}")
     ResponseEntity<String> executeQuery(@PathVariable(name = "id") long id) {
         try {
             service.executeQuery(id);
