@@ -1,7 +1,8 @@
 package DatabaseManager.controllers;
 
 import DatabaseManager.entities.AbstractQueryEntity;
-import DatabaseManager.exceptions.QueryInitializationException;
+import DatabaseManager.exceptions.MyException;
+import DatabaseManager.exceptions.QueryException;
 import DatabaseManager.repositories.QueryRepositoryInterface;
 import DatabaseManager.services.AbstractQueryService;
 import DatabaseManager.utils.GenericEntityDTOMapper;
@@ -28,9 +29,8 @@ public abstract class AbstractQueryController<E extends AbstractQueryEntity, R e
             produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Long> createQuery(@RequestBody D queryDTO) {
         try {
-            Long id = service.createQuery(mapper.toEntity(queryDTO));
-            return new ResponseEntity<Long>(id, HttpStatus.OK);
-        } catch (QueryInitializationException ex) {
+            return new ResponseEntity<Long>(service.createQuery(mapper.toEntity(queryDTO)), HttpStatus.OK);
+        } catch (MyException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Error message", ex.getMessage());
             return ResponseEntity
@@ -44,14 +44,14 @@ public abstract class AbstractQueryController<E extends AbstractQueryEntity, R e
     }
 
 
-    @PutMapping(value = "/modify-single-query",
+    @PutMapping(value = "/modify-query",
                 consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<String> changeQuery(@RequestBody D queryDTO) {
         try {
             service.changeQuery(mapper.toEntity(queryDTO));
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (QueryInitializationException ex) {
+        } catch (MyException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Error message", ex.getMessage());
             return ResponseEntity
@@ -64,12 +64,12 @@ public abstract class AbstractQueryController<E extends AbstractQueryEntity, R e
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("/delete-single-query-by-id/{id}")
+    @DeleteMapping("/delete-query-by-id/{id}")
     ResponseEntity<String> deleteQuery(@PathVariable(name = "id") long id) {
         try {
             service.deleteQuery(id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (QueryInitializationException ex) {
+        } catch (QueryException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Error message", ex.getMessage());
             return ResponseEntity
@@ -88,7 +88,7 @@ public abstract class AbstractQueryController<E extends AbstractQueryEntity, R e
         try {
             E query = service.getById(id);
             return new ResponseEntity<>(mapper.toDTO(query), HttpStatus.OK);
-        } catch (QueryInitializationException ex) {
+        } catch (QueryException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Error message", ex.getMessage());
             return ResponseEntity
@@ -101,7 +101,7 @@ public abstract class AbstractQueryController<E extends AbstractQueryEntity, R e
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping(value = "/get-all-single-queries",
+    @GetMapping(value = "/get-all-queries",
                 produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<D>> getById() {
         try {
@@ -118,7 +118,7 @@ public abstract class AbstractQueryController<E extends AbstractQueryEntity, R e
         try {
             service.executeQuery(id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (QueryInitializationException ex) {
+        } catch (QueryException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Error message", ex.getMessage());
             return ResponseEntity

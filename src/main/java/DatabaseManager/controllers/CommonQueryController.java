@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 public class CommonQueryController extends AbstractQueryController<CommonQueryEntity,
         CommonQueryRepository, CommonQueryService, CommonQueryDTO> {
 
-    public CommonQueryController(CommonQueryService service) {
-        super(service, new GenericEntityDTOMapper<CommonQueryEntity, CommonQueryDTO>());
+    public CommonQueryController(CommonQueryService service, GenericEntityDTOMapper<CommonQueryEntity, CommonQueryDTO> mapper) {
+        super(service, mapper);
     }
 
 

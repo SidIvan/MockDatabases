@@ -1,6 +1,6 @@
 package DatabaseManager.entities;
 
-import DatabaseManager.exceptions.QueryInitializationException;
+import DatabaseManager.exceptions.QueryException;
 import DatabaseManager.repositories.TableRepository;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
@@ -32,24 +32,24 @@ public class TableQueryEntity extends AbstractQueryEntity {
 
 
     @Deprecated
-    public TableQueryEntity(String jsonString) throws QueryInitializationException {
+    public TableQueryEntity(String jsonString) throws QueryException {
         try {
             JSONObject json = (JSONObject) JSONValue.parseWithException(jsonString);
             if (!json.containsKey("query")) {
-                throw new QueryInitializationException(0);
+                throw new QueryException(0);
             }
             if (!json.containsKey("tableName")) {
-                throw new QueryInitializationException(5);
+                throw new QueryException(5);
             }
             if (!TableRepository.isTableExists(json.get("tableName").toString())) {
-                throw new QueryInitializationException(4);
+                throw new QueryException(4);
             }
             tableName = json.get("tableName").toString();
             value = json.get("query").toString();
             if (json.containsKey("id")) {
                 id = parseLong(json.get("id").toString());
             }
-        } catch (QueryInitializationException ex) {
+        } catch (QueryException ex) {
             throw ex;
         } catch (Exception ex) {
             ex.printStackTrace();

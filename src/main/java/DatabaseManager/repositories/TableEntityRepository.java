@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-public interface TableEntityRepository extends JpaRepository<TableEntity, Integer> {
+public interface TableEntityRepository extends JpaRepository<TableEntity, Long> {
 
     List<TableEntity> findByTableName(String title);
 

@@ -1,6 +1,6 @@
 package DatabaseManager.exceptions;
 
-public class TableDoesNotExistException extends Exception {
+public class TableDoesNotExistException extends MyException {
 
     public String getMessage() {
         return this.toString();

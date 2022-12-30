@@ -1,6 +1,6 @@
 package DatabaseManager.exceptions;
 
-public class TableInitializationException extends Exception {
+public class TableInitializationException extends MyException {
     private final int id;
 
     public TableInitializationException() {

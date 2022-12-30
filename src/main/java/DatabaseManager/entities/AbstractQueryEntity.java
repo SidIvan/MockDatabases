@@ -1,11 +1,8 @@
 package DatabaseManager.entities;
 
-import DatabaseManager.exceptions.QueryInitializationException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 import javax.persistence.*;
 import java.io.Serializable;
