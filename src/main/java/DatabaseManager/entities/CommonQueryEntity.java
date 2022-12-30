@@ -22,9 +22,9 @@ public class CommonQueryEntity extends AbstractQueryEntity {
     public CommonQueryEntity(CommonQueryDTO dto) {
         super.setId(dto.getId());
         super.setValue(dto.getValue());
-
     }
 
+    @Deprecated
     public CommonQueryEntity(String jsonString) throws QueryInitializationException {
         try {
             JSONObject json = (JSONObject) JSONValue.parseWithException(jsonString);

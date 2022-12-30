@@ -1,34 +1,34 @@
 package DatabaseManager.controllers;
 
-import DatabaseManager.DTO.TableQueryDTO;
-import DatabaseManager.entities.TableQueryEntity;
+import DatabaseManager.entities.AbstractQueryEntity;
 import DatabaseManager.exceptions.QueryInitializationException;
-import DatabaseManager.services.TableQueryService;
-import DatabaseManager.utils.EntityDTOMapper;
+import DatabaseManager.repositories.QueryRepositoryInterface;
+import DatabaseManager.services.AbstractQueryService;
+import DatabaseManager.utils.GenericEntityDTOMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.Media;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RestController
-@RequestMapping("/api/table-query")
-public class TableQueryController {
+public abstract class AbstractQueryController<E extends AbstractQueryEntity, R extends QueryRepositoryInterface<E>,
+                            S extends AbstractQueryService<E, R>, D> {
 
-    private final TableQueryService tableQueryService;
+    protected final S service;
 
-    @PostMapping(value = "/add-new-query-to-table",
-                consumes = MediaType.APPLICATION_JSON_VALUE,
-                produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Long> createQuery(@RequestBody TableQueryDTO queryDTO) {
+    protected final GenericEntityDTOMapper<E, D> mapper;
+
+
+    @PostMapping(value = "/add-new-query",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Long> createQuery(@RequestBody D queryDTO) {
         try {
-            Long id = tableQueryService.createQuery(EntityDTOMapper.toEntity(queryDTO));
+            Long id = service.createQuery(mapper.toEntity(queryDTO));
             return new ResponseEntity<Long>(id, HttpStatus.OK);
         } catch (QueryInitializationException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
@@ -43,12 +43,13 @@ public class TableQueryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PutMapping(value = "/modify-query-in-table",
+
+    @PutMapping(value = "/modify-single-query",
                 consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<String> changeQuery(@RequestBody TableQueryDTO queryDTO) {
+    ResponseEntity<String> changeQuery(@RequestBody D queryDTO) {
         try {
-            tableQueryService.changeQuery(EntityDTOMapper.toEntity(queryDTO));
+            service.changeQuery(mapper.toEntity(queryDTO));
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (QueryInitializationException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
@@ -63,10 +64,10 @@ public class TableQueryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("/delete-table-query-by-id/{id}")
+    @DeleteMapping("/delete-single-query-by-id/{id}")
     ResponseEntity<String> deleteQuery(@PathVariable(name = "id") long id) {
         try {
-            tableQueryService.deleteQuery(id);
+            service.deleteQuery(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (QueryInitializationException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
@@ -81,11 +82,12 @@ public class TableQueryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/get-table-query-by-id/{id}")
-    ResponseEntity<TableQueryEntity> getById(@PathVariable(name = "id") long id) {
+    @GetMapping(value = "/get-single-query-by-id/{id}",
+                produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<D> getById(@PathVariable(name = "id") long id) {
         try {
-            TableQueryEntity query = tableQueryService.getById(id);
-            return new ResponseEntity<>(query, HttpStatus.OK);
+            E query = service.getById(id);
+            return new ResponseEntity<>(mapper.toDTO(query), HttpStatus.OK);
         } catch (QueryInitializationException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Error message", ex.getMessage());
@@ -99,21 +101,22 @@ public class TableQueryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/get-all-table-queries")
-    ResponseEntity<List<TableQueryEntity>> getById() {
+    @GetMapping(value = "/get-all-single-queries",
+                produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<D>> getById() {
         try {
-            List<TableQueryEntity> queries = tableQueryService.getAll();
-            return new ResponseEntity<>(queries, HttpStatus.OK);
+            List<E> queries = service.getAll();
+            return new ResponseEntity<>(mapper.toDTOs(queries), HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/execute-table-query-by-id/{id}")
-    ResponseEntity<String> executeQuery(@PathVariable(name = "id") String id) {
+    @GetMapping("/execute-single-query-by-id/{id}")
+    ResponseEntity<String> executeQuery(@PathVariable(name = "id") long id) {
         try {
-            tableQueryService.executeQuery(id);
+            service.executeQuery(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (QueryInitializationException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
@@ -127,4 +130,5 @@ public class TableQueryController {
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }

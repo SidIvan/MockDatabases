@@ -27,47 +27,30 @@ public class TableQueryService {
 
     private final TableEntityRepository tableEntityRepository;
 
-    public long createQuery(String jsonString) throws QueryInitializationException {
+    public long createQuery(TableQueryEntity queryEntity) throws QueryInitializationException {
         try {
-            TableQueryEntity query = new TableQueryEntity(jsonString);
-            System.out.println(query.getTableName());
-            List<TableEntity> tableEntities = tableEntityRepository.findByTableName(query.getTableName());
+            List<TableEntity> tableEntities = tableEntityRepository.findByTableName(queryEntity.getTableName());
             if (tableEntities.size() == 0) {
                 throw new QueryInitializationException(4);
             }
-            query.setTableEntity(tableEntities.get(0));
-            return tableQueryRepository.saveAndFlush(query).getId();
+            queryEntity.setTableEntity(tableEntities.get(0));
+            return tableQueryRepository.saveAndFlush(queryEntity).getId();
         } catch (QueryInitializationException ex) {
             throw ex;
         }
     }
 
-    public void changeQuery(String jsonString) throws QueryInitializationException {
+    public void changeQuery(TableQueryEntity queryEntity) throws QueryInitializationException {
         try {
-            JSONObject json = (JSONObject) JSONValue.parseWithException(jsonString);
-            if (!json.containsKey("queryId") || !json.containsKey("query") || !json.containsKey("tableName")) {
-                throw new QueryInitializationException(0);
-            }
-            long id = parseLong(json.get("queryId").toString());
-            long changeNum = tableQueryRepository.putValue(id, json.get("query").toString());
-            if (changeNum == 0) {
-                if (!TableRepository.isTableExists(json.get("tableName").toString())) {
-                    throw new QueryInitializationException(4);
-                }
-                throw new QueryInitializationException(2);
-            }
-        } catch (QueryInitializationException ex) {
-            throw ex;
-        } catch (NumberFormatException ex) {
-            throw new QueryInitializationException(1);
+            long changeNum = tableQueryRepository.putValue(queryEntity.getId(), queryEntity.getValue());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public void deleteQuery(String id) throws QueryInitializationException {
+    public void deleteQuery(long id) throws QueryInitializationException {
         try {
-            int numDeletes = tableQueryRepository.deleteQuery(parseInt(id));
+            int numDeletes = tableQueryRepository.deleteQuery(id);
             if (numDeletes == 0) {
                 throw new QueryInitializationException(2);
             }
@@ -81,9 +64,9 @@ public class TableQueryService {
     }
 
 
-    public TableQueryEntity getById(String id) throws QueryInitializationException {
+    public TableQueryEntity getById(long id) throws QueryInitializationException {
         try {
-            Optional<TableQueryEntity> query = tableQueryRepository.findById(parseLong(id));
+            Optional<TableQueryEntity> query = tableQueryRepository.findById(id);
             if (query.isEmpty()) {
                 throw new QueryInitializationException(2);
             }

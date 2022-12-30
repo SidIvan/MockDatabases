@@ -1,7 +1,9 @@
 package DatabaseManager.utils;
 
 import DatabaseManager.DTO.CommonQueryDTO;
+import DatabaseManager.DTO.TableQueryDTO;
 import DatabaseManager.entities.CommonQueryEntity;
+import DatabaseManager.entities.TableQueryEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,14 @@ public class EntityDTOMapper {
         CommonQueryEntity entity = new CommonQueryEntity();
         entity.setId(dto.getId());
         entity.setValue(dto.getValue());
+        return entity;
+    }
+
+    public static TableQueryEntity toEntity(TableQueryDTO dto) {
+        TableQueryEntity entity = new TableQueryEntity();
+        entity.setId(dto.getId());
+        entity.setValue(dto.getValue());
+        entity.setTableName(dto.getTableName());
         return entity;
     }
 
@@ -29,4 +39,5 @@ public class EntityDTOMapper {
         }
         return dtos;
     }
+
 }
