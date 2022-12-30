@@ -82,11 +82,11 @@ public abstract class AbstractQueryController<E extends AbstractQueryEntity, R e
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping(value = "/get-single-query-by-id/{id}",
+    @GetMapping(value = "/get-query-by-id/{id}",
                 produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<D> getById(@PathVariable(name = "id") long id) {
         try {
-            E query = service.getById(id);
+            E query = service.findById(id);
             return new ResponseEntity<>(mapper.toDTO(query), HttpStatus.OK);
         } catch (QueryException ex) {
             HttpHeaders responseHeaders = new HttpHeaders();
@@ -103,7 +103,7 @@ public abstract class AbstractQueryController<E extends AbstractQueryEntity, R e
 
     @GetMapping(value = "/get-all-queries",
                 produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<D>> getById() {
+    ResponseEntity<List<D>> getAll() {
         try {
             List<E> queries = service.getAll();
             return new ResponseEntity<>(mapper.toDTOs(queries), HttpStatus.OK);

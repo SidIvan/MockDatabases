@@ -37,47 +37,5 @@ public class TableQueryService extends AbstractQueryService<TableQueryEntity, Ta
         setTableEntity(queryEntity);
         return super.changeQuery(queryEntity);
     }
-//
-//    public TableQueryEntity getById(long id) throws QueryInitializationException {
-//        try {
-//            Optional<TableQueryEntity> query = tableQueryRepository.findById(id);
-//            if (query.isEmpty()) {
-//                throw new QueryInitializationException(2);
-//            }
-//            return query.get();
-//        } catch (NumberFormatException ex) {
-//            throw new QueryInitializationException(1);
-//        } catch (QueryInitializationException ex) {
-//            throw ex;
-//        } catch (Exception ex) {
-//            System.out.println("A");
-//            ex.printStackTrace();
-//        }
-//        return new TableQueryEntity();
-//    }
-//
-//    public List<TableQueryEntity> getAll() {
-//        try {
-//            List<TableQueryEntity> queries = tableQueryRepository.findAll();
-//            return queries;
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//        return new ArrayList<>();
-//    }
-//
-//    public void executeQuery(String id) throws QueryInitializationException {
-//        try {
-//            long queryId = parseLong(id);
-//            Optional<TableQueryEntity> query = tableQueryRepository.findById(parseLong(id));
-//            if (query.isEmpty()) {
-//                throw new QueryInitializationException(2);
-//            }
-//            SQLExecuter.execute(query.get().getValue());
-//        } catch (NumberFormatException ex) {
-//            throw new QueryInitializationException(1);
-//        } catch (QueryInitializationException ex) {
-//            throw ex;
-//        }
-//    }
+
 }

@@ -1,8 +1,10 @@
 package DatabaseManager.utils;
 
 import DatabaseManager.DTO.CommonQueryDTO;
+import DatabaseManager.DTO.TableDTO;
 import DatabaseManager.DTO.TableQueryDTO;
 import DatabaseManager.entities.CommonQueryEntity;
+import DatabaseManager.entities.TableEntity;
 import DatabaseManager.entities.TableQueryEntity;
 import DatabaseManager.exceptions.MyException;
 import DatabaseManager.exceptions.QueryException;
@@ -19,6 +21,13 @@ import java.util.List;
 public class EntityDTOMapper {
 
     private final TableEntityRepository tablesRepository;
+
+    public TableDTO toDTO(TableEntity entity) {
+        TableDTO dto = new TableDTO();
+        dto.setId(entity.getId());
+        dto.setTableName(entity.getTableName());
+        return dto;
+    }
 
     public CommonQueryEntity toEntity(CommonQueryDTO dto) {
         CommonQueryEntity entity = new CommonQueryEntity();
@@ -52,6 +61,8 @@ public class EntityDTOMapper {
         TableQueryDTO dto = new TableQueryDTO();
         dto.setId(entity.getId());
         dto.setValue(entity.getValue());
+        dto.setTableName(entity.getTableName());
+        dto.setTableEntity(toDTO(entity.getTableEntity()));
         return dto;
     }
 

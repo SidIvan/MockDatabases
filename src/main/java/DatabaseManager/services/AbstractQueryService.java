@@ -62,19 +62,16 @@ public abstract class AbstractQueryService<E extends AbstractQueryEntity,
         }
     }
 
-    public E getById(long id) throws QueryException {
+    public E findById(long id) throws QueryException {
         try {
             Optional<E> query = tableRepository.findById(id);
             if (query.isEmpty()) {
-                throw new QueryException(2);
+                throw new QueryException(11, id + "");
             }
             return query.get();
-        } catch (NumberFormatException ex) {
-            throw new QueryException(1);
         } catch (QueryException ex) {
             throw ex;
         } catch (Exception ex) {
-            System.out.println("A");
             ex.printStackTrace();
         }
         throw new RuntimeException();
