@@ -5,7 +5,6 @@ import DatabaseManager.DTO.TableQueryDTO;
 import DatabaseManager.entities.CommonQueryEntity;
 import DatabaseManager.entities.TableQueryEntity;
 import DatabaseManager.exceptions.MyException;
-import DatabaseManager.exceptions.TableDoesNotExistException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,7 @@ public class GenericEntityDTOMapper<E, D> {
     private final EntityDTOMapper mapper;
 
     public E toEntity(D dto) throws MyException {
-        if (dto instanceof CommonQueryEntity) {
+        if (dto instanceof CommonQueryDTO) {
             return (E) mapper.toEntity((CommonQueryDTO) dto);
         }
         return (E) mapper.toEntity((TableQueryDTO) dto);

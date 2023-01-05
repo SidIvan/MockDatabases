@@ -3,6 +3,7 @@ package DatabaseManager.controllers;
 import DatabaseManager.exceptions.TableDoesNotExistException;
 import DatabaseManager.exceptions.TableInitializationException;
 import DatabaseManager.services.TableService;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -11,11 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/table")
 public class TableController {
 
-    @Autowired
-    private TableService tableService;
+    private final TableService tableService;
 
     @PostMapping("/create-table")
     public ResponseEntity<String> createTable(@RequestBody String tableInfo) {

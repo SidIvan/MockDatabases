@@ -1,17 +1,14 @@
 package DatabaseManager;
 
+import DatabaseManager.SQLUtils.DatabaseProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static java.lang.Integer.parseInt;
 
 @EnableWebMvc
+@EnableConfigurationProperties({DatabaseProperties.class})
 @SpringBootApplication
 public class App {
 

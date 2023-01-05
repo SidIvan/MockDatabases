@@ -3,7 +3,6 @@ package DatabaseManager.entities;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
-import org.json.simple.JSONObject;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -26,11 +25,8 @@ public class TableEntity {
     @JsonManagedReference
     public Set<TableQueryEntity> tableQueryEntities;
 
-    public TableEntity() {}
-
     public TableEntity(String tableName) {
         this.tableName = tableName;
     }
 
-    public TableEntity(JSONObject json) {}
 }

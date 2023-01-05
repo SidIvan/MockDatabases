@@ -1,6 +1,5 @@
 package DatabaseManager.repositories;
 
-import DatabaseManager.entities.AbstractQueryEntity;
 import DatabaseManager.entities.CommonQueryEntity;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

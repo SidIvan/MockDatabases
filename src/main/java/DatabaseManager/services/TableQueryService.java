@@ -7,13 +7,12 @@ import DatabaseManager.exceptions.QueryException;
 import DatabaseManager.repositories.TableEntityRepository;
 import DatabaseManager.repositories.TableQueryRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static java.lang.Integer.parseInt;
-import static java.lang.Long.parseLong;
-
 @Service
+@Transactional
 public class TableQueryService extends AbstractQueryService<TableQueryEntity, TableQueryRepository> {
 
     public TableQueryService(TableQueryRepository repository, TableEntityRepository repository2) {

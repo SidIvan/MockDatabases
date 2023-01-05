@@ -25,6 +25,7 @@ public abstract class AbstractQueryService<E extends AbstractQueryEntity,
 
     public long createQuery(E queryEntity) throws MyException {
         try {
+            System.out.println(queryEntity.getId());
             return tableRepository.saveAndFlush(queryEntity).getId();
         } catch (Exception ex) {
             ex.printStackTrace();
