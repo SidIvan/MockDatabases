@@ -48,7 +48,7 @@ public class TableSQLConstructor {
     }
 
     public static String constructGetByName(String name) {
-        String query = "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + name +"'";
+        String query = "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + name + "'";
         return query;
     }
 

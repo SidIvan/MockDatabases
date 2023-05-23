@@ -25,7 +25,7 @@ public class GenericEntityDTOMapper<E, D> {
     }
 
     public D toDTO(E entity) {
-        if (entity instanceof CommonQueryDTO) {
+        if (entity instanceof CommonQueryEntity) {
             return (D) mapper.toDTO((CommonQueryEntity) entity);
         }
         return (D) mapper.toDTO((TableQueryEntity) entity);
